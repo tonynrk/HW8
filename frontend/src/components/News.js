@@ -79,9 +79,9 @@ class News extends Component {
     }
     
 
-    handleClickNews = (id, news_station) => {
+    handleClickNews = (id, news_station, news_section) => {
         if(this.state.share === false){
-            this.props.history.push("/article" + "?id=" + id + "&news_station=" + news_station);
+            this.props.history.push("/article" + "?id=" + id + "&news_station=" + news_station + "&news_section=" + news_section);
         }else{
             this.setState({share:false});
         }
@@ -91,7 +91,6 @@ class News extends Component {
     handleClose = () => {
         this.setState({ show: false, id: null  });
     }
-
 
     handleShare = (id,e) => {
         
@@ -123,7 +122,7 @@ class News extends Component {
 
         return (
             <div style={{ padding: "1rem" }} >
-                <Container fluid onClick={(e) => this.handleClickNews(id, news_station, e)} key={id}>
+                <Container fluid onClick={(e) => this.handleClickNews(id, news_station, section, e)} key={id}>
                     <Row>
                         <Col md={3}>
                             <Image src={image} fluid />
@@ -150,17 +149,17 @@ class News extends Component {
                             <h4>Share via</h4>
                             <Row>
                                 <Col>
-                                    <FacebookShareButton url={id2}>
+                                    <FacebookShareButton url={id2} hashtag="#CSCI_571_NewsApp">
                                         <FacebookIcon size={"4rem"} round={true} />
                                     </FacebookShareButton>
                                 </Col>
                                 <Col>
-                                    <TwitterShareButton url={id2}>
+                                    <TwitterShareButton url={id2} hashtags={["CSCI_571_NewsApp"]}>
                                         <TwitterIcon size={"4rem"} round={true} />
                                     </TwitterShareButton>
                                 </Col>
                                 <Col>
-                                    <EmailShareButton url={id2}>
+                                    <EmailShareButton url={id2} subject="#CSCI_571_NewsApp">
                                         <EmailIcon size={"4rem"} round={true} />
                                     </EmailShareButton>
                                 </Col>

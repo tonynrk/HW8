@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import styled from 'styled-components';
-import { Container, Row, Card, Accordion } from 'react-bootstrap';
+import { Container, Row, Card, Accordion, Col,} from 'react-bootstrap';
 import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import PageWithComments from "./PageWithComments";
 import Loading from "./Loading";
-import scrollToComponent from 'react-scroll-to-component';
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
+// import scrollToComponent from 'react-scroll-to-component';
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import {EmailIcon, FacebookIcon, TwitterIcon, FacebookShareButton, EmailShareButton, TwitterShareButton} from 'react-share';
+import { FaBookmark,FaRegBookmark } from 'react-icons/fa';
+import ReactTooltip from "react-tooltip";
+import { ToastContainer, toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles/Toaster.css'
 
 const Styles = styled.div`
 
@@ -17,24 +23,45 @@ const Styles = styled.div`
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 5px;
     }
-
-
 `;
+
+
 
 class Article extends Component {
 
     constructor(props) {
         super(props);
         const search = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+        let info = JSON.parse(localStorage.getItem('bookmark_news'));
+        let id2 =  search['news_station']==="NYTimesNews" ? search['id'] : "https://www.theguardian.com/"+search['id'];
         this.state = {
             id: search['id'],
             news: "plain",
             news_station: search['news_station'],
-            isOpen: false
+            isOpen: false,
+            ref: React.createRef(),
+            bookmark_article: id2 in info ? true : false,
+            news_section: search["news_section"]
         };
-        this.myRef = React.createRef(); 
+        this.toggleCollapse = this.toggleCollapse.bind(this);
+        this.handleBookmark = this.handleBookmark.bind(this);
     }
 
+    handleBookmark = (id,title,details) => {
+
+        this.state.bookmark_article === false ? toast("Saving "+title) : toast('Removing '+title); 
+        let info = JSON.parse(localStorage.getItem('bookmark_news'));
+        if( !(id in info) ){
+            info[id] = details;
+            
+        }else{
+            delete info[id]
+        }
+        localStorage.setItem('bookmark_news', JSON.stringify(info));
+
+        this.setState({bookmark_article:!this.state.bookmark_article});
+        
+    }
     async getDataAxios() {
 
         let url;
@@ -47,6 +74,7 @@ class Article extends Component {
             url = url + "?id=" + this.state.id;
         }
         let response = await axios.get(url);
+        console.log(response);
         try {
 
             if (this.state.news_station === "NYTimesNews") {
@@ -65,8 +93,10 @@ class Article extends Component {
     }
 
     make_news = (my_news, news_station) => {
-
+        
         let a_news, title, multimedia, img, date, description;
+
+        let id2 = news_station==="NYTimesNews" ? this.state.id : "https://www.theguardian.com/"+this.state.id;
 
         if (news_station === "NYTimesNews") {
 
@@ -125,6 +155,14 @@ class Article extends Component {
             description = a_news['blocks']['body'][0]['bodyTextSummary'];
 
         }
+        let details = {
+            id:this.state.id,
+            news_station:this.state.news_station,
+            img:img,
+            title:title,
+            date:date,
+            section:this.state.news_section
+        }
 
         if (description.split(/[.?!]\s/).length <= 4) {
 
@@ -135,7 +173,27 @@ class Article extends Component {
                             <Row>
                                 <Card>
                                     <Card.Title>{title}</Card.Title>
-                                    <p>{date}</p>
+                                    <Row>
+                                        <Col>
+                                            <p><i>{date}</i></p>
+                                        </Col>
+                                        <Col xs={3}>
+                                            <FacebookShareButton url={id2} hashtag="#CSCI_571_NewsApp">
+                                                <FacebookIcon size={"1.5rem"} round={true} />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton url={id2} hashtags={["CSCI_571_NewsApp"]}>
+                                                <TwitterIcon size={"1.5rem"} round={true} />
+                                            </TwitterShareButton>
+                                            <EmailShareButton url={id2} subject="#CSCI_571_NewsApp">
+                                                <EmailIcon size={"1.5rem"} round={true} />
+                                            </EmailShareButton>
+                                        </Col>
+                                        <Col xs={1}>
+                                            
+                                            <span data-tip="Bookmark">{ this.state.bookmark_article === true ? <FaBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)}  />}</span>
+    
+                                        </Col>
+                                    </Row>
                                     <Card.Img src={img}></Card.Img>
                                     <Card.Text>{description}</Card.Text>
                                 </Card>
@@ -167,7 +225,27 @@ class Article extends Component {
                             <Row style={{padding:"1rem"}}>
                                 <Card style={{ position: "relative" }}>
                                     <Card.Title>{title}</Card.Title>
-                                    <p>{date}</p>
+                                    <Row>
+                                        <Col>
+                                            <p><i>{date}</i></p>
+                                        </Col>
+                                        <Col xs={3}>
+                                            <FacebookShareButton data-tip="Facebook" url={id2} hashtag="#CSCI_571_NewsApp">
+                                                <FacebookIcon size={"2rem"} round={true} />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton data-tip="Twitter" url={id2} hashtags={["CSCI_571_NewsApp"]}>
+                                                <TwitterIcon size={"2rem"} round={true} />
+                                            </TwitterShareButton>
+                                            <EmailShareButton data-tip="Email" url={id2} subject="#CSCI_571_NewsApp">
+                                                <EmailIcon size={"2rem"} round={true} />
+                                            </EmailShareButton>
+                                        </Col>
+                                        <Col xs={1}>
+                                                
+                                            <span data-tip="Bookmark">{ this.state.bookmark_article === true ? <FaBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} />}</span>
+
+                                        </Col>
+                                    </Row>
                                     <Card.Img src={img}></Card.Img>
                                     <Card.Text>{description_1}</Card.Text>
                                     <Accordion.Collapse>
@@ -191,10 +269,11 @@ class Article extends Component {
     }
 
     toggleCollapse = () => {
+        
         this.setState({ isOpen: !this.state.isOpen });
         if(this.state.isOpen === false){
-
-            scrollToComponent(this.Desc,{ offset: 10, align: 'bottom', duration: 500, ease:'inCirc'});
+            this.state.ref.current.scrollIntoView({ behavior: "smooth", block: 'start' });
+            // scrollToComponent(this.Desc,{ offset: 10, align: 'bottom', duration: 500, ease:'inCirc'});
         }
     }
 
@@ -207,10 +286,16 @@ class Article extends Component {
                 let jsx = this.make_news(my_news, this.state.news_station)
 
                 return (
-                    <div>
-                        {jsx}
-                        <PageWithComments id={this.state.id} ref={(section) => { this.Desc = section; }}  />
-                    </div>
+                                        
+                        <div>
+                            {jsx}
+
+                            <ToastContainer toastClassName="toast-alert" transition={Zoom} position="top-center" autoClose={2000} hideProgressBar={true} />
+                            <ReactTooltip place="top" type="dark" effect="float"/>
+                            <PageWithComments id={this.state.id}  />
+                            <p ref={this.state.ref}></p>
+                        </div>
+                    
                 );
 
             } else {

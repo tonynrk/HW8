@@ -1,0 +1,13 @@
+.news_station , .section{
+    text-transform: uppercase;
+    display: inline;
+    padding: 3px;
+    border-radius: 5px;
+}
+.news_station , .section, .date{
+    font-size: 0.75rem;
+}
+
+.card_title{
+    font-size: 1.2rem;
+}

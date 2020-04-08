@@ -6,13 +6,14 @@ import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import Loading from "./Loading";
+import './styles/Tag.css';
 
 const Styles = styled.div`
     .each_card{
         padding: 1rem;
     }
     .card{
-        padding: 2rem;
+        padding: 1.5rem;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 5px;
     }
@@ -91,9 +92,9 @@ class Results extends Component {
 
     }
 
-    handleClickNews = (id,news_station) => {
+    handleClickNews = (id,news_station,news_section) => {
 
-        this.props.history.push("/article"+"?id="+id+"&news_station="+news_station);
+        this.props.history.push("/article"+"?id="+id+"&news_station="+news_station+"&news_section=" + news_section);
     }
 
     each_news = (id, news_station , img, title, date, section, sect_txt_color, sect_bg_color) => {
@@ -109,17 +110,17 @@ class Results extends Component {
 
         return (
             <Col className="each_card" md={3} >
-                <Card onClick={(e) => {this.handleClickNews(id,news_station,e)}}>
-                    <Card.Title>{title}</Card.Title>
+                <Card onClick={(e) => {this.handleClickNews(id,news_station,section,e)}}>
+                    <Card.Title className="card_title">{title}</Card.Title>
                     <Card.Img src={img} style={{ marginBottom:"0.5rem" }}></Card.Img>
                     <Row>
                         <Col>
-                            <p><i>{date}</i></p>
+                            <p className="date"><i>{date}</i></p>
                         </Col>
 
                         {section !== "" ? 
                         <Col style={{ textAlign: 'right' }}>
-                            <p className="tag" style={{ textTransform: 'uppercase', color: `${sect_txt_color}`, display: "inline-block", backgroundColor: `${sect_bg_color}`, padding: '3px', borderRadius: '5px' }}><b>{section}</b></p>
+                            <p className="section" style={{color: `${sect_txt_color}`, backgroundColor: `${sect_bg_color}` }}><b>{section}</b></p>
                         </Col> : <Col></Col>}
                     </Row>
                 </Card>
