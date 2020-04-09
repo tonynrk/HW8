@@ -6,7 +6,10 @@ import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MdShare } from 'react-icons/md';
 import {EmailIcon, FacebookIcon, TwitterIcon, FacebookShareButton, EmailShareButton, TwitterShareButton} from 'react-share';
-import {FaTrashAlt} from 'react-icons/fa'
+import {FaTrashAlt} from 'react-icons/fa';
+import { ToastContainer, toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles/Toaster.css';
 
 const Styles = styled.div`
     .each_card{
@@ -74,7 +77,8 @@ class Bookmarks extends Component {
             bookmark_news:  JSON.parse(localStorage.getItem('bookmark_news')),
             show: false,
             share: false,
-            id: null
+            id: null,
+            show_del: true
         }
     }
 
@@ -100,15 +104,17 @@ class Bookmarks extends Component {
         e.preventDefault();
     }
 
-    handleTrash = (id_object,e) => {
+    handleTrash = (id_object,title,e) => {
 
         let info = JSON.parse(localStorage.getItem('bookmark_news'));
         delete info[id_object]
         localStorage.setItem('bookmark_news', JSON.stringify(info));
+
         this.setState({bookmark_news:info});
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
         e.preventDefault();
+        this.state.show_del === true ? toast("Removing " + title) : toast("Removing " + title);
 
     }
 
@@ -126,8 +132,8 @@ class Bookmarks extends Component {
 
         return (
             <Col className="each_card" md={3} >
-                <Card onClick={(e) => {this.handleClickNews(id,news_station,section,e)}}>
-                    <Card.Title className="card_title">{title}<MdShare onClick={(e) => this.handleShare(id,e)} /><FaTrashAlt onClick={(e) => this.handleTrash(id2,e) } /> </Card.Title>
+                <Card style={{cursor:"pointer"}} onClick={(e) => {this.handleClickNews(id,news_station,section,e)}}>
+                    <Card.Title className="card_title">{title}<MdShare onClick={(e) => this.handleShare(id,e)} /><FaTrashAlt onClick={(e) => this.handleTrash(id2,title,e) } /> </Card.Title>
                     <Card.Img src={img} style={{ marginBottom:"0.5rem" }}></Card.Img>
                     <Row>
                         <Col>
@@ -202,21 +208,31 @@ class Bookmarks extends Component {
     render() {
         
         let my_news = this.state.bookmark_news;
-        if (Object.keys(my_news).length !== 0) {
-            let jsx = this.make_news(my_news);
-                return (
-                    <Styles>
-                        <Container fluid>
-                            <h3>Results</h3>
-                            <Row>
-                                {jsx}
-                            </Row>
-                        </Container>
-                    </Styles>
-                );
-        }else{
-            return <h3 style={{textAlign:"center"}}>You have no saved articles</h3>
+        try {
+            this.props.functionName()
+        }catch{
+
         }
+        let jsx = this.make_news(my_news);
+        
+        return (
+            <Styles>
+                {Object.keys(my_news).length !== 0 ? 
+                    <Container fluid>
+                        <h3>Results</h3>
+                        <Row>
+                            {jsx}    
+                        </Row>
+                    </Container>
+                :
+                    <Container fluid>
+                        <h3 style={{textAlign:"center"}}>You have no saved articles</h3>
+                    </Container>
+                }
+                <ToastContainer toastClassName="toast-alert" transition={Zoom} position="top-center" autoClose={1000} hideProgressBar={true} />                          
+            </Styles>
+        );
+
 
 
     }

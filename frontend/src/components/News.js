@@ -14,6 +14,7 @@ const Styles = styled.div`
         padding: 2rem;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 5px;
+        cursor: pointer;
     }
     .description {
         display: -webkit-box;
@@ -125,7 +126,10 @@ class News extends Component {
                 <Container fluid onClick={(e) => this.handleClickNews(id, news_station, section, e)} key={id}>
                     <Row>
                         <Col md={3}>
-                            <Image src={image} fluid />
+                            <Container fluid style={{padding:"0.25rem",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)"}}>
+                                <Image src={image} fluid />
+                            </Container>
+
                         </Col>
                         <Col md={9}>
                             <span><h5><i>{title}<MdShare onClick={(e) => this.handleShare(id,e)} /></i></h5></span>
@@ -133,7 +137,7 @@ class News extends Component {
 
                             <Row>
                                 <Col>
-                                    <p><i>{date}</i></p>
+                                    <p><b><i>{date}</i></b></p>
                                 </Col>
                                 <Col style={{ textAlign: 'right' }}>
                                     <p className="tag" style={{ textTransform: 'uppercase', color: `${sect_txt_color}`, display: "inline-block", backgroundColor: `${sect_bg_color}`, padding: '3px', borderRadius: '5px' }}><b>{section}</b></p>
@@ -207,6 +211,13 @@ class News extends Component {
     render() {
 
         let my_news = this.state.news;
+
+
+        try {
+            this.props.functionName()
+        }catch{
+
+        }
 
         try {
 

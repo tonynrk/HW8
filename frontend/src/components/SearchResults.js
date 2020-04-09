@@ -81,6 +81,7 @@ class SearchResults extends Component {
                 <AsyncSelect className="mySelect"
                     loadOptions={this.handleSearchChange} 
                     onInputChange={this.onInputStringChange} 
+                    placeholder="Enter Keyword.."
                     onChange={(e,select) => {this.handleSelectNews(e,select)}}
                     />
             </Styles>

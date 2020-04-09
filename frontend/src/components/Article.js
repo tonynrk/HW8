@@ -14,7 +14,7 @@ import { FaBookmark,FaRegBookmark } from 'react-icons/fa';
 import ReactTooltip from "react-tooltip";
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './styles/Toaster.css'
+import './styles/Toaster.css';
 
 const Styles = styled.div`
 
@@ -172,29 +172,28 @@ class Article extends Component {
                         <Container fluid>
                             <Row>
                                 <Card>
-                                    <Card.Title>{title}</Card.Title>
+                                    <Card.Title><h3><i>{title}</i></h3></Card.Title>
                                     <Row>
-                                        <Col>
-                                            <p><i>{date}</i></p>
+                                        <Col xs={5}>
+                                            <p><i>&nbsp;&nbsp;{date}</i></p>
                                         </Col>
-                                        <Col xs={3}>
-                                            <FacebookShareButton url={id2} hashtag="#CSCI_571_NewsApp">
-                                                <FacebookIcon size={"1.5rem"} round={true} />
+                                        <Col xs={5} style={{textAlign:"right"}}>
+                                            <FacebookShareButton data-tip="Facebook" data-for="exp_page" url={id2} hashtag="#CSCI_571_NewsApp">
+                                                <FacebookIcon size={"2rem"} round={true} />
                                             </FacebookShareButton>
-                                            <TwitterShareButton url={id2} hashtags={["CSCI_571_NewsApp"]}>
-                                                <TwitterIcon size={"1.5rem"} round={true} />
+                                            <TwitterShareButton data-tip="Twitter" data-for="exp_page" url={id2} hashtags={["CSCI_571_NewsApp"]}>
+                                                <TwitterIcon size={"2rem"} round={true} />
                                             </TwitterShareButton>
-                                            <EmailShareButton url={id2} subject="#CSCI_571_NewsApp">
-                                                <EmailIcon size={"1.5rem"} round={true} />
+                                            <EmailShareButton data-tip="Email" data-for="exp_page" url={id2} subject="#CSCI_571_NewsApp">
+                                                <EmailIcon size={"2rem"} round={true} />
                                             </EmailShareButton>
                                         </Col>
-                                        <Col xs={1}>
-                                            
-                                            <span data-tip="Bookmark">{ this.state.bookmark_article === true ? <FaBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)}  />}</span>
-    
+                                        <Col style={{textAlign:"right"}}>
+                                                
+                                            <span data-tip="Bookmark" data-for="exp_page">{ this.state.bookmark_article === true ? <FaBookmark color="red" size={"2rem"}  onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red"  size={"2rem"} onClick={(e) => this.handleBookmark(id2,title,details,e)} />}</span>
                                         </Col>
                                     </Row>
-                                    <Card.Img src={img}></Card.Img>
+                                    <Card.Img style={{borderRadius: "0px"}} src={img}></Card.Img>
                                     <Card.Text>{description}</Card.Text>
                                 </Card>
                             </Row>
@@ -223,36 +222,35 @@ class Article extends Component {
                     <Container fluid>
                         <Accordion defaultActiveKey="2">
                             <Row style={{padding:"1rem"}}>
-                                <Card style={{ position: "relative" }}>
-                                    <Card.Title>{title}</Card.Title>
+                                <Card style={{ position: "relative",cursor:"pointer" }}>
+                                    <Card.Title><h3><i>{title}</i></h3></Card.Title>
                                     <Row>
-                                        <Col>
-                                            <p><i>{date}</i></p>
+                                        <Col xs={5}>
+                                            <p><i>&nbsp;&nbsp;{date}</i></p>
                                         </Col>
-                                        <Col xs={3}>
-                                            <FacebookShareButton data-tip="Facebook" url={id2} hashtag="#CSCI_571_NewsApp">
+                                        <Col xs={5} style={{textAlign:"right"}}>
+                                            <FacebookShareButton data-tip="Facebook" data-for="exp_page" url={id2} hashtag="#CSCI_571_NewsApp">
                                                 <FacebookIcon size={"2rem"} round={true} />
                                             </FacebookShareButton>
-                                            <TwitterShareButton data-tip="Twitter" url={id2} hashtags={["CSCI_571_NewsApp"]}>
+                                            <TwitterShareButton data-tip="Twitter" data-for="exp_page" url={id2} hashtags={["CSCI_571_NewsApp"]}>
                                                 <TwitterIcon size={"2rem"} round={true} />
                                             </TwitterShareButton>
-                                            <EmailShareButton data-tip="Email" url={id2} subject="#CSCI_571_NewsApp">
+                                            <EmailShareButton data-tip="Email" data-for="exp_page" url={id2} subject="#CSCI_571_NewsApp">
                                                 <EmailIcon size={"2rem"} round={true} />
                                             </EmailShareButton>
                                         </Col>
-                                        <Col xs={1}>
+                                        <Col style={{textAlign:"right"}}>
                                                 
-                                            <span data-tip="Bookmark">{ this.state.bookmark_article === true ? <FaBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red" onClick={(e) => this.handleBookmark(id2,title,details,e)} />}</span>
-
+                                            <span data-tip="Bookmark" data-for="exp_page">{ this.state.bookmark_article === true ? <FaBookmark color="red" size={"2rem"}  onClick={(e) => this.handleBookmark(id2,title,details,e)} /> : <FaRegBookmark color="red"  size={"2rem"} onClick={(e) => this.handleBookmark(id2,title,details,e)} />}</span>
                                         </Col>
                                     </Row>
-                                    <Card.Img src={img}></Card.Img>
+                                    <Card.Img style={{borderRadius: "0px"}} src={img}></Card.Img>
                                     <Card.Text>{description_1}</Card.Text>
                                     <Accordion.Collapse>
                                         <Card.Text >{description_2}</Card.Text>
                                     </Accordion.Collapse>
 
-                                    <Accordion.Toggle style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#FFFFFF",border:"none"  }} onClick={() => this.toggleCollapse()}>
+                                    <Accordion.Toggle style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#FFFFFF",border:"none",cursor:"pointer"  }} onClick={() => this.toggleCollapse()}>
                                         {this.state.isOpen ? (<IoIosArrowUp />) : (<IoIosArrowDown />)}
                                     </Accordion.Toggle>
                                 </Card>
@@ -279,20 +277,27 @@ class Article extends Component {
 
 
     render() {
+        
         let my_news = this.state.news;
         if (my_news !== "plain") {
             if (my_news !== null) {
 
                 let jsx = this.make_news(my_news, this.state.news_station)
+                try {
+                    this.props.functionName()
+                }catch{
 
+                }
                 return (
-                                        
+                                  
                         <div>
                             {jsx}
 
                             <ToastContainer toastClassName="toast-alert" transition={Zoom} position="top-center" autoClose={2000} hideProgressBar={true} />
-                            <ReactTooltip place="top" type="dark" effect="float"/>
-                            <PageWithComments id={this.state.id}  />
+                            <ReactTooltip place="top" type="dark" effect="solid" id="exp_page" />
+                            <Container fluid>
+                                <PageWithComments id={this.state.id}  />
+                            </Container>
                             <p ref={this.state.ref}></p>
                         </div>
                     

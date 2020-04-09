@@ -110,7 +110,7 @@ class Results extends Component {
 
         return (
             <Col className="each_card" md={3} >
-                <Card onClick={(e) => {this.handleClickNews(id,news_station,section,e)}}>
+                <Card style={{cursor:"pointer"}} onClick={(e) => {this.handleClickNews(id,news_station,section,e)}}>
                     <Card.Title className="card_title">{title}</Card.Title>
                     <Card.Img src={img} style={{ marginBottom:"0.5rem" }}></Card.Img>
                     <Row>
@@ -183,6 +183,11 @@ class Results extends Component {
     render() {
 
         let my_news = this.state.news;
+        try {
+            this.props.functionName()
+        }catch{
+
+        }
         if (my_news !== "plain") {
             if (my_news !== null) {
 
